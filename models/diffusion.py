@@ -13,7 +13,7 @@ import numpy as np
 from utils import data_loader
 from models.positional_embeddings import PositionalEmbedding
 from models import denoiser
-from models.guide import rewardGuide, classifierGuide, toyGuide
+# from models.guide import rewardGuide, classifierGuide, toyGuide
 # diffusion_model.py
 from tqdm import tqdm
 prev_fs = 0
@@ -613,8 +613,8 @@ class AdvicedDiffusionModel(nn.Module):
         sample = torch.randn(list(cond.shape[:-1])+[self.in_dim], device=cond.device)
         timesteps = list(range(len(self.noise_scheduler)))[::-1]
         
-        fs = []
-        rs = []
+        # fs = []
+        # rs = []
         cond = cond.squeeze(0)
         cond = self.model.conditioning(cond, g)
         for i, t in enumerate(timesteps):
@@ -625,31 +625,31 @@ class AdvicedDiffusionModel(nn.Module):
                 residual = self.model(sample, ts, g, cond, advisors)
                 # if self.noise_scheduler.pred_x0: 
                     # residual = torch.sigmoid(residual)-0.5
-                rs.append(residual[0,0,0].item())
+                # rs.append(residual[0,0,0].item())
                 # if t<5:
                 #     print('1')
                 sample = self.noise_scheduler.step(residual, t, sample)
                 # sample = residual  # 陷入不动点
-                fs.append(sample[0,0,0].item())
+                # fs.append(sample[0,0,0].item())
                 
         #plot fs and save: plt.plot(
-        global prev_fs 
-        global prev_rs
-        plt.figure(1)
-        plt.plot(fs)
-        plt.plot(prev_fs)
-        plt.legend(["current", "previous"])
-        plt.savefig("1_.png")
-        plt.clf()
-        plt.figure(2)
-        plt.plot(rs)
-        plt.plot(prev_rs)
-        plt.legend(["current", "previous"])
-        plt.savefig("2_.png")
-        plt.clf()
+        # global prev_fs 
+        # global prev_rs
+        # plt.figure(1)
+        # plt.plot(fs)
+        # plt.plot(prev_fs)
+        # plt.legend(["current", "previous"])
+        # plt.savefig("1_.png")
+        # plt.clf()
+        # plt.figure(2)
+        # plt.plot(rs)
+        # plt.plot(prev_rs)
+        # plt.legend(["current", "previous"])
+        # plt.savefig("2_.png")
+        # plt.clf()
         
-        prev_fs = fs
-        prev_rs = rs
+        # prev_fs = fs
+        # prev_rs = rs
         return sample
 
 class AdvicedDiffusionModel_yTmean(nn.Module):
@@ -787,8 +787,8 @@ class AdvicedDiffusionModel_yTmean(nn.Module):
             sample = sample + y_T_mean
         timesteps = list(range(len(self.noise_scheduler)))[::-1]
         
-        fs = []
-        rs = []
+        # fs = []
+        # rs = []
         cond = cond.squeeze(0)
         cond = self.model.conditioning(cond, g)
         for i, t in enumerate(timesteps):
@@ -799,31 +799,31 @@ class AdvicedDiffusionModel_yTmean(nn.Module):
                 residual = self.model(sample, ts, g, cond, advisors)
                 # if self.noise_scheduler.pred_x0: 
                 #     residual = torch.sigmoid(residual)-0.5
-                rs.append(residual[0,0,0].item())
+                # rs.append(residual[0,0,0].item())
                 # if t<5:
                 #     print('1')
                 sample = self.noise_scheduler.step(residual, t, sample, y_T_mean)
                 # sample = residual  # 陷入不动点
-                fs.append(sample[0,0,0].item())
+                # fs.append(sample[0,0,0].item())
                 
-        #plot fs and save: plt.plot(
-        global prev_fs 
-        global prev_rs
-        plt.figure(1)
-        plt.plot(fs)
-        plt.plot(prev_fs)
-        plt.legend(["current", "previous"])
-        plt.savefig("1_.png")
-        plt.clf()
-        plt.figure(2)
-        plt.plot(rs)
-        plt.plot(prev_rs)
-        plt.legend(["current", "previous"])
-        plt.savefig("2_.png")
-        plt.clf()
+        # #plot fs and save: plt.plot(
+        # global prev_fs 
+        # global prev_rs
+        # plt.figure(1)
+        # plt.plot(fs)
+        # plt.plot(prev_fs)
+        # plt.legend(["current", "previous"])
+        # plt.savefig("1_.png")
+        # plt.clf()
+        # plt.figure(2)
+        # plt.plot(rs)
+        # plt.plot(prev_rs)
+        # plt.legend(["current", "previous"])
+        # plt.savefig("2_.png")
+        # plt.clf()
         
-        prev_fs = fs
-        prev_rs = rs
+        # prev_fs = fs
+        # prev_rs = rs
         
         # norm
         sample_min = sample.min()

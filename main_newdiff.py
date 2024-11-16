@@ -182,6 +182,9 @@ def validate_in_train(model: AdvicedDiffusionModel_yTmean, valid_dataloader, wri
 
 def train_gvae_diff(model, train_dataloader, valid_dataloader, test_dataloader, args, compare_dataloader=None, advisors=None):
     save_path = args.save_path
+    # create save path
+    if not os.path.exists(save_path):
+        os.makedirs(save_path)
     writer = SummaryWriter(f"./runs/{args.dataset}_{args.gnn_type}_{args.hidden_dim}_{args.num_layers}_{args.activation}_{args.mlp_layers}")
     torch.save(args, args.save_path + f"{args.dataset}_{args.gnn_type}_{args.hidden_dim}_{args.num_layers}_{args.activation}_{args.mlp_layers}.args")
     # optimizer_gvae = torch.optim.Adam(gvae.parameters(), lr=args_gvae.lr_vae/10)
@@ -260,8 +263,8 @@ def test(model:AdvicedDiffusionModel_yTmean, test_dataloader, epoch=None, adviso
             # assert len(sample.shape)==3 and sample.shape[0]==gt.shape[0]
             
             sample = sample.squeeze()
-            if i<2:
-                draw_data_distribution(sample.cpu().numpy(), f"sample_diff_{epoch}_{i}.jpg")
+            # if i<2:
+            #     draw_data_distribution(sample.cpu().numpy(), f"sample_diff_{epoch}_{i}.jpg")
             
             sample = (sample > threshold).int()
             # _, idx = torch.sort(sample.squeeze(), descending=True)
@@ -274,11 +277,11 @@ def test(model:AdvicedDiffusionModel_yTmean, test_dataloader, epoch=None, adviso
             #     print(cond.squeeze().cpu().numpy())
             #     print(advisor.squeeze().cpu().numpy())
             #     print('-------------------')
-            if i==len(test_dataloader)-1 and ep>=9:
-                # save prediction and gt
-                np.save(f"ours_pred_diff_{epoch}_{args.dataset}.npy", sample.cpu().numpy())
-                np.save(f"ours_gt_diff_{epoch}_{args.dataset}.npy", gt.cpu().numpy())
-                np.save(f"ours_cond_diff_{epoch}_{args.dataset}.npy", data.ndata['feat'].cpu().numpy())
+            # if i==len(test_dataloader)-1 and ep>=9:
+            #     # save prediction and gt
+            #     np.save(f"ours_pred_diff_{epoch}_{args.dataset}.npy", sample.cpu().numpy())
+            #     np.save(f"ours_gt_diff_{epoch}_{args.dataset}.npy", gt.cpu().numpy())
+            #     np.save(f"ours_cond_diff_{epoch}_{args.dataset}.npy", data.ndata['feat'].cpu().numpy())
             acc += accuracy_score(gt.cpu().numpy().flatten(), sample.cpu().numpy().flatten())
             f1 += f1_score(gt.cpu().numpy().flatten(), sample.cpu().numpy().flatten())
             precision += precision_score(gt.cpu().numpy().flatten(), sample.cpu().numpy().flatten())
@@ -396,7 +399,7 @@ if __name__ == "__main__":
     
     # args_gnn = torch.load(args.gvae_args)
     # train_dataloader, valid_dataloader, test_dataloader, eval_train_dataloader, num_features = load_data(args.dataset, dataset_path='new_data2')
-    train_dataloader, valid_dataloader, test_dataloader, eval_train_dataloader, num_features = load_data(args.dataset, dataset_path='new_data_deepim') 
+    train_dataloader, valid_dataloader, test_dataloader, eval_train_dataloader, num_features = load_data(args.dataset, dataset_path='datasets') 
     print("len(train_dataloader): ", len(train_dataloader), "len(valid_dataloader): ", len(valid_dataloader), "len(test_dataloader): ", len(test_dataloader), "len(eval_train_dataloader): ", len(eval_train_dataloader))
     # args_gnn.num_features = num_features
 

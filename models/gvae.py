@@ -7,10 +7,10 @@ import torch.nn as nn
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import dgl
-from dgl.ops import edge_softmax
-import dgl.function as fn
-from dgl.utils import expand_as_pair
+# import dgl
+# from dgl.ops import edge_softmax
+# import dgl.function as fn
+# from dgl.utils import expand_as_pair
 import pdb
 
 from math import exp

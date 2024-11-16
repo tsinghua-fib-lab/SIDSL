@@ -1,0 +1,11 @@
+dgl==2.4.0+cu118
+matplotlib==3.7.1
+networkx==3.0
+numpy==1.24.2
+PyYAML==6.0
+PyYAML==6.0.2
+scikit_learn==1.2.2
+torch==2.1.0
+torch==2.0.0+cu117.with.pypi.cudnn
+torch_geometric==2.6.1
+tqdm==4.65.0

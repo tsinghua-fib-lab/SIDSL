@@ -11,7 +11,7 @@ import dgl
 import torch
 import torch.nn as nn
 from torch import optim as optim
-from tensorboardX import SummaryWriter
+from torch.utils.tensorboard import SummaryWriter
 
 
 
