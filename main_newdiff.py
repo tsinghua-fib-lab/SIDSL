@@ -17,6 +17,7 @@ import warnings
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+from models.utils import set_random_seed
 import pdb
 ep=0
 threshold = 0.5
@@ -442,6 +443,7 @@ if __name__ == "__main__":
     mlp_layers = args.mlp_layers
     num_advisors = args.num_advisors
     
+    set_random_seed(44)
     model = AdvicedDiffusionModel_yTmean(gnn_type, 
                             in_dim, 
                             noise_emb_dim, 
