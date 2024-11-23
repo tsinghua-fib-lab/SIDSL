@@ -12,7 +12,7 @@ from utils.criterion import MMDLoss
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 from models.diffusion import DiffusionModel, AdvicedDiffusionModel, AdvicedDiffusionModel_yTmean
 from utils.train_utils import save_model, draw_data_distribution, calculate_mean_distance
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 import warnings
 import numpy as np
 import matplotlib.pyplot as plt
@@ -130,26 +130,26 @@ def validate_in_train(model: AdvicedDiffusionModel_yTmean, valid_dataloader, wri
             # else:
             #     another_samples = torch.cat((another_samples, another_sample), dim=0)
             
-            if i == 0:
-                num_uncond = [torch.sum(uncond_vec).item()]
-                num_gt = [len(gt_index)]
-            else:
-                num_uncond.append(torch.sum(uncond_vec).item())
-                num_gt.append(len(gt_index))
+            # if i == 0:
+            #     num_uncond = [torch.sum(uncond_vec).item()]
+            #     num_gt = [len(gt_index)]
+            # else:
+            #     num_uncond.append(torch.sum(uncond_vec).item())
+            #     num_gt.append(len(gt_index))
             # dist_sample = calculate_mean_distance(uncond_id, gt_index, data.cpu())
-            dist_sample=0
-            if i == 0:
-                dists_sample = [dist_sample]
-            else:
-                dists_sample.append(dist_sample)
+            # dist_sample=0
+            # if i == 0:
+            #     dists_sample = [dist_sample]
+            # else:
+            #     dists_sample.append(dist_sample)
                 
-        loss_cond_this_epoch = loss_this_epoch / len(train_dataloader)
-        dist_sample = np.array(dists_sample)
+        # loss_cond_this_epoch = loss_this_epoch / len(train_dataloader)
+        # dist_sample = np.array(dists_sample)
 
-        dists_sample = dist_sample[np.logical_not(np.isnan(dist_sample))]
-        print("num_gt: ", np.mean(num_gt).item(), np.std(num_gt).item())
-        print("num_uncond: ", np.mean(num_uncond).item(), np.std(num_uncond).item())
-        print("dist_sample: ", np.mean(dists_sample).item(), np.std(dists_sample).item(),)
+        # dists_sample = dist_sample[np.logical_not(np.isnan(dist_sample))]
+        # print("num_gt: ", np.mean(num_gt).item(), np.std(num_gt).item())
+        # print("num_uncond: ", np.mean(num_uncond).item(), np.std(num_uncond).item())
+        # print("dist_sample: ", np.mean(dists_sample).item(), np.std(dists_sample).item(),)
             
             
         for i, data in enumerate(compare_dataloader):
@@ -166,14 +166,14 @@ def validate_in_train(model: AdvicedDiffusionModel_yTmean, valid_dataloader, wri
             
             
         # calculate the mmd between samples and gts
-        assert samples.shape == gts.shape and gts_comps.shape == gts.shape
-        mmd = MMDLoss()
-        num_of_samples = samples.shape[0]
+        # assert samples.shape == gts.shape and gts_comps.shape == gts.shape
+        # mmd = MMDLoss()
+        # num_of_samples = samples.shape[0]
         
-        mmd_uncond_vec = mmd(uncond_vecs.view(num_of_samples, -1), gts.view(num_of_samples, -1))
-        print("mmd_uncond_vec: ", mmd_uncond_vec.item())
-        mmd_comp = mmd(gts_comps.view(num_of_samples, -1), gts.view(num_of_samples, -1))
-        print("mmd_comp_vec_gt: ", mmd_comp.item())
+        # mmd_uncond_vec = mmd(uncond_vecs.view(num_of_samples, -1), gts.view(num_of_samples, -1))
+        # print("mmd_uncond_vec: ", mmd_uncond_vec.item())
+        # mmd_comp = mmd(gts_comps.view(num_of_samples, -1), gts.view(num_of_samples, -1))
+        # print("mmd_comp_vec_gt: ", mmd_comp.item())
         
         writer.add_scalar('Validation_intrain/Loss', loss_this_epoch, epoch)
         print(f"Epoch {epoch}, Validation loss {loss_this_epoch}")
@@ -243,7 +243,6 @@ def test(model:AdvicedDiffusionModel_yTmean, test_dataloader, epoch=None, adviso
         f1 = 0
         precision = 0
         recall = 0
-        auc = 0
         time_start = time.time()
         for i, [data,advisor] in enumerate(zip(test_dataloader, advisors)):
             data = data.to(device)
@@ -286,16 +285,14 @@ def test(model:AdvicedDiffusionModel_yTmean, test_dataloader, epoch=None, adviso
             f1 += f1_score(gt.cpu().numpy().flatten(), sample.cpu().numpy().flatten())
             precision += precision_score(gt.cpu().numpy().flatten(), sample.cpu().numpy().flatten())
             recall += recall_score(gt.cpu().numpy().flatten(), sample.cpu().numpy().flatten())
-            auc += roc_auc_score(gt.cpu().numpy().flatten(), sample.cpu().numpy().flatten())
         time_end = time.time()
         time_per_sample = (time_end - time_start) / len(test_dataloader)
         acc = acc / len(test_dataloader)
         f1 = f1 / len(test_dataloader)
         precision = precision / len(test_dataloader)
         recall = recall / len(test_dataloader)
-        auc = auc / len(test_dataloader)
-        print(f"Test accuracy {acc}, f1 {f1}, precision {precision}, recall {recall}, auc {auc}, time per sample {time_per_sample}")
-    return acc, f1, precision, recall, auc
+        print(f"Test accuracy {acc}, f1 {f1}, precision {precision}, recall {recall},  time per sample {time_per_sample}")
+    return acc, f1, precision, recall
 
 def train_cond(model, train_dataloader, valid_dataloader, args):
     optimizer_cond = torch.optim.Adam(model.model.conditional.parameters(), lr=args.lr)
@@ -466,7 +463,6 @@ if __name__ == "__main__":
     if args.state_dict:
         model.load_state_dict(torch.load(args.state_dict))
         # model = torch.load(args.state_dict, map_location=device)
-        pdb.set_trace()
     model = model.to(device)
     
     # gvae = gvae.to(device)

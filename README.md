@@ -8,6 +8,14 @@ jazz_IC50, jazz_LT50, jazz_SIS50, netscience_IC50, netscience_LT50, netscience_S
 
 Tunable params can be checked in the following description.
 
+## load saved model to run code
+
+run command:
+> python main_newdiff.py --dataset [dataset] --save_dict [path to saved model]
+
+e.g.
+> python main_newdiff.py --dataset jazz_IC50 --state_dict ./saved_diffusers/jazz_IC50_best.pt
+
 
 ## Requirements
 
