@@ -4,7 +4,10 @@ run command:
 > python main_newdiff.py --dataset [dataset]
 
 Available datasets:(as in datasets\synthesis)
-jazz_IC50, jazz_LT50, jazz_SIS50, netscience_IC50, netscience_LT50, netscience_SIS50, power_IC50, power_LT50, power_SIS50
+- android_10_30, christianity_10_30, jazz_IC50, jazz_LT50, jazz_SIS50, netscience_IC50, netscience_LT50, netscience_SIS50, power_IC50, power_LT50, power_SIS50,
+
+- Some large datasets files are not included in the repository. Find them in the following link:
+https://drive.google.com/drive/folders/1Ga7qTNscLug49o69E18AAyiXvRKDjjY5?usp=sharing
 
 Tunable params can be checked in the following description.
 
