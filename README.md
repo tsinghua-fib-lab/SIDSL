@@ -1,3 +1,5 @@
+**Official implementation of our CIKM 2025 work "Structure-prior Informed Diffusion Model for Graph Source Localization with Limited Data"**
+
 ## run code
 
 run command:
