@@ -46,3 +46,13 @@ Please check requirements.txt for the required packages.
 - `scheduler`: Whether to use learning rate scheduler (default: True)
 - `train_cond`: Whether to train the condition module (default: False)
 
+### Cite this paper
+```
+@article{chen2025structure,
+  title={Structure-prior Informed Diffusion Model for Graph Source Localization with Limited Data},
+  author={Chen, Hongyi and Ding, Jingtao and Liang, Xiaojun and Li, Yong and Zhang, Xiao-Ping},
+  journal={arXiv e-prints},
+  pages={arXiv--2502},
+  year={2025}
+}
+```
